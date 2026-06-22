@@ -15,14 +15,16 @@ function withCors(response) {
   return response;
 }
 
-export function OPTIONS() {
+export async function OPTIONS() {
   return withCors(new Response(null, { status: 200 }));
 }
 
-export function GET(request) {
+export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id") || "myskin";
-  const imageUrl = `https://picsum.photos/500/500?seed=${encodeURIComponent(id)}`;
+  const imageUrl = id.startsWith("http")
+    ? id
+    : `https://picsum.photos/500/500?seed=${encodeURIComponent(id)}`;
 
   return withCors(NextResponse.redirect(imageUrl, 302));
 }

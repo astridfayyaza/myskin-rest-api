@@ -1,12 +1,4 @@
 {
-  "rewrites": [
-    {
-      "source": "/skincare.php",
-      "destination": "/api/skincare"
-    },
-    {
-      "source": "/image.php",
-      "destination": "/api/image"
-    }
-  ]
+  "version": 2,
+  "cleanUrls": true
 }

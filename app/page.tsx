@@ -1,25 +1,82 @@
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-6 font-sans text-zinc-950 dark:bg-black dark:text-zinc-50">
-      <main className="w-full max-w-2xl">
-        <p className="text-sm font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
-          myskin REST API
+    <div style={{
+      fontFamily: 'monospace',
+      color: '#333',
+      backgroundColor: '#fff',
+      padding: '40px 20px',
+      maxWidth: '800px',
+      margin: '0 auto',
+      lineHeight: '1.6'
+    }}>
+      <h1 style={{ borderBottom: '2px solid #333', paddingBottom: '10px', fontSize: '24px' }}>
+        MYSKIN NATIVE NEXT.JS REST API SPECIFICATION
+      </h1>
+      <p style={{ color: '#666', fontSize: '14px' }}>
+        Production serverless App Router backend pipeline built natively with Next.js, Neon PostgreSQL, and Vercel Blob.
+      </p>
+
+      <h2 style={{ fontSize: '18px', marginTop: '30px', textTransform: 'uppercase' }}>1. Base Configuration</h2>
+      <hr style={{ border: '0', borderTop: '1px solid #ccc' }} />
+      <ul style={{ listStyleType: 'square', paddingLeft: '20px', fontSize: '14px' }}>
+        <li><strong>Base URL:</strong> <code>https://your-vercel-domain.vercel.app/</code></li>
+        <li><strong>Authentication:</strong> Google OAuth ID Token (JWT) via <code>Authorization</code> header.</li>
+      </ul>
+
+      <h2 style={{ fontSize: '18px', marginTop: '40px', textTransform: 'uppercase' }}>2. Endpoints</h2>
+      
+      {/* GET */}
+      <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
+        <p style={{ margin: '0 0 10px 0' }}><strong>GET /api/skincare</strong></p>
+        <p style={{ fontSize: '14px', margin: '0 0 10px 0' }}>
+          Queries Neon PostgreSQL. Filters items owned by 'system' or matching the token payload's email claim.
         </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-          Backend is ready.
-        </h1>
-        <p className="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-400">
-          Android clients can use the compatibility endpoints{" "}
-          <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-sm dark:bg-zinc-800">
-            /skincare.php
-          </code>{" "}
-          and{" "}
-          <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-sm dark:bg-zinc-800">
-            /image.php
-          </code>
-          , which rewrite to the Next.js App Router API routes.
+        <pre style={{ backgroundColor: '#eee', padding: '10px', fontSize: '13px', overflowX: 'auto' }}>
+{`[
+  {
+    "id": "1",
+    "nama": "Hydrating Cleanser",
+    "brand": "CeraVe",
+    "imageId": "https://...",
+    "mine": 0
+  }
+]`}
+        </pre>
+      </div>
+
+      {/* POST */}
+      <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
+        <p style={{ margin: '0 0 10px 0' }}><strong>POST /api/skincare</strong></p>
+        <p style={{ fontSize: '14px', margin: '0 0 10px 0' }}>
+          Parses native <code>request.formData()</code>. Uploads file binaries directly to Vercel Blob and inserts rows into Neon DB.
         </p>
-      </main>
+        <pre style={{ backgroundColor: '#eee', padding: '10px', fontSize: '13px', overflowX: 'auto' }}>
+{`{
+  "status": "success",
+  "message": "Saved successfully!"
+}`}
+        </pre>
+      </div>
+
+      {/* DELETE */}
+      <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
+        <p style={{ margin: '0 0 10px 0' }}><strong>DELETE /api/skincare?id=[item_id]</strong></p>
+        <p style={{ fontSize: '14px', margin: '0 0 10px 0' }}>
+          Deletes a record if the creator matches the authorization credentials.
+        </p>
+      </div>
+
+      {/* IMAGE */}
+      <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
+        <p style={{ margin: '0 0 10px 0' }}><strong>GET /api/image?id=[image_id]</strong></p>
+        <p style={{ fontSize: '14px', margin: '0' }}>
+          Resolves media requests via 302 redirection to the storage CDN or default placeholders.
+        </p>
+      </div>
+
+      <p style={{ textAlign: 'center', fontSize: '11px', color: '#999', marginTop: '60px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+        End of Document.
+      </p>
     </div>
   );
 }
