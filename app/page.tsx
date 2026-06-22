@@ -10,7 +10,7 @@ export default function Home() {
       lineHeight: '1.6'
     }}>
       <h1 style={{ borderBottom: '2px solid #333', paddingBottom: '10px', fontSize: '24px' }}>
-        MYSKIN NATIVE NEXT.JS REST API SPECIFICATION
+        MYSKIN REST API DOCS
       </h1>
       <p style={{ color: '#666', fontSize: '14px' }}>
         Production serverless App Router backend pipeline built natively with Next.js, Neon PostgreSQL, and Vercel Blob.
