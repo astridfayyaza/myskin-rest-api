@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS, PUT",
   "Access-Control-Allow-Headers": "Authorization, Content-Type",
   "Access-Control-Max-Age": "86400",
 };
@@ -182,5 +182,49 @@ export async function DELETE(request) {
       { status: "error", message: "Failed to delete skincare record." },
       { status: 500 },
     );
+  }
+}
+
+export async function PUT(request) {
+  try {
+    await initializeDatabase();
+    const userId = getUserIdFromToken(request);
+
+    const { searchParams } = new URL(request.url);
+    const id = Number(searchParams.get("id"));
+
+    if (!Number.isInteger(id) || id < 1) {
+      return json({ status: "error", message: "The id query parameter is required." }, { status: 400 });
+    }
+
+    const formData = await request.formData();
+    const nama = String(formData.get("nama") || "").trim();
+    const brand = String(formData.get("brand") || "").trim();
+    const image = formData.get("image");
+
+    if (!nama || !brand) {
+      return json({ status: "error", message: "Both nama and brand are required." }, { status: 400 });
+    }
+
+    // Check if a new file upload was sent. If yes, replace it. If not, retain old image.
+    if (isUploadableFile(image) && image.size > 0) {
+      const imageId = await uploadImage(image);
+      await sql`
+        UPDATE skincare 
+        SET nama = ${nama}, brand = ${brand}, image_id = ${imageId}
+        WHERE id = ${id} AND owner = ${userId};
+      `;
+    } else {
+      await sql`
+        UPDATE skincare 
+        SET nama = ${nama}, brand = ${brand}
+        WHERE id = ${id} AND owner = ${userId};
+      `;
+    }
+
+    return json({ status: "success", message: "Updated successfully!" });
+  } catch (error) {
+    console.error("Failed to update skincare record:", error);
+    return json({ status: "error", message: "Failed to update skincare record." }, { status: 500 });
   }
 }
